@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hello小⚪!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #fffbeb;
+            background-image: radial-gradient(#e2ddcf 7%, transparent 8%);
+            background-size: 24px 24px;
+            font-family: "Comic Sans MS", cursive, sans-serif;
+            padding:20px 12px;
+        }
+        .wrap{
+            max-width:920px;
+            margin:0 auto;
+        }
+        h1{
+            text-align:center;
+            font-size:42px;
+            color:#222;
+            margin-bottom:24px;
+            transform: rotate(-1deg);
+        }
+        .sketch-card{
+            background:#fffef6;
+            border:3px solid #222;
+            border-radius: 2px 12px 4px 14px;
+            box-shadow:4px 4px 0 #222;
+            padding:22px;
+            margin-bottom:20px;
+        }
+        .tab-bar{
+            display:flex;
+            gap:6px;
+            flex-wrap:wrap;
+            margin-bottom:20px;
+        }
+        .tab-btn{
+            padding:10px 18px;
+            border:2px solid #222;
+            background:#fff;
+            border-radius:3px 8px 5px 10px;
+            box-shadow:2px 2px 0 #222;
+            cursor:pointer;
+            font-size:17px;
+            font-family: inherit;
+        }
+        .tab-btn.active{
+            background:#ffe888;
+        }
+        .tab-panel{
+            display:none;
+        }
+        .tab-panel.show{
+            display:block;
+        }
+        .service-item{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            padding:14px 0;
+            border-bottom:2px dashed #ccc;
+        }
+        .service-item:last-child{
+            border-bottom:none;
+        }
+        .info{
+            display:flex;
+            align-items:center;
+            gap:10px;
+        }
+        .icon{
+            font-size:26px;
+        }
+        .name-text{
+            font-size:16px;
+        }
+        .price-text{
+            color:#d03030;
+            font-weight:bold;
+        }
+        .num-input{
+            width:64px;
+            padding:6px;
+            border:2px solid #222;
+            border-radius:4px 9px 6px 11px;
+            text-align:center;
+            font-family:inherit;
+        }
+        .control-bar{
+            margin-top:24px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            flex-wrap:wrap;
+            gap:12px;
+        }
+        .total-text{
+            font-size:20px;
+            font-weight:bold;
+        }
+        button{
+            padding:10px 20px;
+            border:2px solid #111;
+            box-shadow:2px 2px 0 #111;
+            border-radius:4px 10px 6px 12px;
+            background:#fff;
+            cursor:pointer;
+            font-family:inherit;
+            font-size:16px;
+        }
+        .btn-order{
+            background:#ffbaba;
+        }
+        .btn-reset{
+            background:#dddddd;
+        }
+        .btn-copy{
+            background:#b8ddff;
+        }
+        .mask{
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background:rgba(0,0,0,0.45);
+            display:none;
+            align-items:center;
+            justify-content:center;
+            z-index:99;
+        }
+        .popup{
+            background:#fffef6;
+            border:3px solid black;
+            border-radius: 3px 14px 5px 13px;
+            box-shadow:5px 5px 0 black;
+            width:440px;
+            max-width:92%;
+            padding:26px;
+        }
+        .order-no{
+            text-align:center;
+            margin:10px 0;
+            color:#444;
+        }
+        .order-list{
+            margin:14px 0;
+            min-height:70px;
+        }
+        .order-total{
+            font-weight:bold;
+            font-size:18px;
+            padding-top:10px;
+            border-top:2px dashed #aaa;
+        }
+        .qrcode-wrap{
+            text-align:center;
+            margin:16px 0;
+        }
+        .popup-buttons{
+            margin-top:20px;
+            text-align:right;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <h1>hello小⚪!</h1>
+
+    <div class="sketch-card">
+        <div class="tab-bar">
+            <button class="tab-btn active" data-tab="chat">💬陪聊</button>
+            <button class="tab-btn" data-tab="play">🎮陪玩</button>
+            <button class="tab-btn" data-tab="music">🎵陪听音乐</button>
+            <button class="tab-btn" data-tab="mind">💖心灵开导</button>
+        </div>
+
+        <!--陪聊-->
+        <div class="tab-panel show" id="chat">
+            <div class="service-item">
+                <div class="info">
+                    <span class="icon">🎞️</span>
+                    <div>
+                        <div class="name-text">抖音在线发送视频互动</div>
+                        <div class="price-text">5元 /30分钟，时长可叠加</div>
+                    </div>
+                </div>
+                <input class="num-input" type="number" min="0" value="0" data-price="5">
+            </div>
+            <div class="service-item">
+                <div class="info">
+                    <span class="icon">💌</span>
+                    <div>
+                        <div class="name-text">微信QQ在线聊天</div>
+                        <div class="price-text">5元 /30分钟，时长可叠加</div>
+                    </div>
+                </div>
+                <input class="num-input" type="number" min="0" value="0" data-price="5">
+            </div>
+        </div>
+
+        <!--陪玩-->
+        <div class="tab-panel" id="play">
+            <div class="service-item">
+                <div class="info">
+                    <span class="icon">⚔️</span>
+                    <div>
+                        <div class="name-text">技术版｜和平精英/三角洲行动/星露谷物语</div>
+                        <div class="price-text">6元 /半小时，时长可叠加</div>
+                    </div>
+                </div>
+                <input class="num-input" type="number" min="0" value="0" data-price="6">
+            </div>
+            <div class="service-item">
+                <div class="info">
+                    <span class="icon">🗣️</span>
+                    <div>
+                        <div class="name-text">聊天版｜和平精英/三角洲行动/星露谷物语</div>
+                        <div class="price-text">6元 /半小时，时长可叠加</div>
+                    </div>
+                </div>
+                <input class="num-input" type="number" min="0" value="0" data-price="6">
+            </div>
+            <div class="service-item">
+                <div class="info">
+                    <span class="icon">✨</span>
+                    <div>
+                        <div class="name-text">混合版｜和平精英/三角洲行动/星露谷物语</div>
+                        <div class="price-text">7元 /半小时，时长可叠加</div>
+                    </div>
+                </div>
+                <input class="num-input" type="number" min="0" value="0" data-price="7">
+            </div>
+        </div>
+
+        <!--陪听音乐-->
+        <div class="tab-panel" id="music">
+            <div class="service-item">
+                <div class="info">
+                    <span class="icon">🎶</span>
+                    <div>
+                        <div class="name-text">陪听版｜QQ音乐 /网易云音乐</div>
+                        <div class="price-text">3元 /1小时</div>
+                    </div>
+                </div>
+                <input class="num-input" type="number" min="0" value="0" data-price="3">
+            </div>
+            <div class="service-item">
+                <div class="info">
+                    <span class="icon">💞</span>
+                    <div>
+                        <div class="name-text">陪听陪聊版｜QQ音乐 /网易云音乐</div>
+                        <div class="price-text">5元 /1小时</div>
+                    </div>
+                </div>
+                <input class="num-input" type="number" min="0" value="0" data-price="5">
+            </div>
+        </div>
+
+        <!--心灵开导-->
+        <div class="tab-panel" id="mind">
+            <div class="service-item">
+                <div class="info">
+                    <span class="icon">🎧</span>
+                    <div>
+                        <div class="name-text">心灵开导‑仅语音（约半小时）</div>
+                        <div class="price-text">8元 /次</div>
+                    </div>
+                </div>
+                <input class="num-input" type="number" min="0" value="0" data-price="8">
+            </div>
+            <div class="service-item">
+                <div class="info">
+                    <span class="icon">📹</span>
+                    <div>
+                        <div class="name-text">心灵开导‑视频版（半小时）</div>
+                        <div class="price-text">100元 /次</div>
+                    </div>
+                </div>
+                <input class="num-input" type="number" min="0" value="0" data-price="100">
+            </div>
+        </div>
+
+        <div class="control-bar">
+            <div class="total-text">合计：<span id="totalPrice">0</span> 元</div>
+            <div>
+                <button class="btn-order" id="submitBtn">📝提交订单</button>
+                <button class="btn-reset" id="resetBtn">重置</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mask" id="mask">
+    <div class="popup">
+        <h3>🧾您的服务订单</h3>
+        <div class="order-no" id="orderNoDom"></div>
+        <div class="order-list" id="orderList"></div>
+        <div class="order-total">订单总金额：<span id="popTotal">0</span> 元</div>
+        <div class="qrcode-wrap">
+            <p>请扫码付款👇</p>
+            <!--把你的收款码图片src写在这里-->
+            <img alt="收款码" style="width:160px;margin‑top:8px;border:2px solid #222;">
+        </div>
+        <div class="popup-buttons">
+            <button class="btn-copy" id="copyBtn">复制订单文本</button>
+            <button id="closePop">关闭</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+    const numInputs = document.querySelectorAll('.num-input');
+    const totalDom = document.getElementById('totalPrice');
+    const submitBtn = document.getElementById('submitBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const mask = document.getElementById('mask');
+    const orderListDom = document.getElementById('orderList');
+    const popTotalDom = document.getElementById('popTotal');
+    const closePop = document.getElementById('closePop');
+    const orderNoDom = document.getElementById('orderNoDom');
+    const copyBtn = document.getElementById('copyBtn');
+
+    let currentOrderText = "";
+
+    //tab切换
+    tabBtns.forEach(btn=>{
+        btn.addEventListener('click',()=>{
+            const targetId = btn.dataset.tab;
+            tabBtns.forEach(b=>b.classList.remove('active'));
+            tabPanels.forEach(p=>p.classList.remove('show'));
+            btn.classList.add('active');
+            document.getElementById(targetId).classList.add('show');
+        })
+    })
+
+    //生成订单号
+    function generateOrderNo(){
+        const num = Math.floor(Math.random()*100000000).toString().padStart(8,'0');
+        return `ORD‑${num}`;
+    }
+
+    //计算总价
+    function calcTotal(){
+        let sum = 0;
+        numInputs.forEach(inp=>{
+            const price = Number(inp.dataset.price);
+            const count = Number(inp.value);
+            sum += price * count;
+        })
+        totalDom.innerText = sum;
+        return sum;
+    }
+
+    numInputs.forEach(inp=>inp.addEventListener('input',calcTotal));
+
+    //提交订单
+    submitBtn.addEventListener('click',()=>{
+        const allItems = [];
+        numInputs.forEach((inp)=>{
+            const count = Number(inp.value);
+            if(count>0){
+                const nameEl = inp.closest('.service-item').querySelector('.name-text');
+                const itemName = nameEl.innerText;
+                const price = Number(inp.dataset.price);
+                allItems.push({name:itemName,price:price,count:count});
+            }
+        })
+        if(allItems.length===0){
+            alert("请选择至少一项服务！");
+            return;
+        }
+        const orderNo = generateOrderNo();
+        orderNoDom.innerText = `订单号：${orderNo}`;
+        orderListDom.innerHTML = '';
+        let total = 0;
+        currentOrderText = `📝新服务订单\n订单号：${orderNo}\n`;
+        allItems.forEach(item=>{
+            const lineSum = item.price * item.count;
+            total += lineSum;
+            const div = document.createElement('div');
+            div.style.padding="4px 0";
+            const line = `${item.name} ×${item.count} ￥${lineSum}`;
+            div.innerText = line;
+            orderListDom.appendChild(div);
+            currentOrderText += line + "\n";
+        })
+        currentOrderText += `订单总金额：${total}元`;
+        popTotalDom.innerText = total;
+        mask.style.display = 'flex';
+    })
+
+    //复制订单
+    copyBtn.addEventListener('click',async ()=>{
+        try{
+            await navigator.clipboard.writeText(currentOrderText);
+            alert("✅订单已经复制！粘贴发送到钉钉/企业微信即可");
+        }catch(e){
+            alert("复制失败，请手动拷贝弹窗内文字");
+        }
+    })
+
+    closePop.addEventListener('click',()=>{
+        mask.style.display = 'none';
+    })
+
+    resetBtn.addEventListener('click',()=>{
+        numInputs.forEach(inp=>inp.value=0);
+        calcTotal();
+    })
+
+    calcTotal();
+</script>
+</body>
+</html>
